@@ -10,7 +10,7 @@
 |---|---|---|---|---|
 | M1 样例采信 | 定位坏行并做重复裁决 | `POST /api/stages/intake` | `app/intake/service.py` | `tests/test_intake.py` |
 | M2 领域整理 | 解析字段与单位，隔离不满足前置条件的行 | `POST /api/stages/prepare` | `app/domain/prepare.py` | `tests/test_prepare.py` |
-| M3 核心计算 | 执行项目核心规则并生成可比指标 | `POST /api/stages/calculate` | `app/domain/calculate.py` | `tests/test_calculate.py` |
+| M3 核心计算 | 执行项目核心规则并生成可比指标 | `POST /api/stages/calculate` | `app/domain/calculate.py`、`app/domain/meters.py` | `tests/test_calculate.py`、`tests/test_meters.py` |
 | M4 规则判定 | 给出通过、复核或阻断结论 | `POST /api/stages/decision` | `app/domain/decision.py` | `tests/test_decision.py` |
 | M5 运行对账 | 核对来源行、采信、隔离、重复与计算条目 | `POST /api/stages/reconcile` | `app/reconcile/ledger.py` | `tests/test_reconcile.py` |
 | M6 批次复核 | 带版本号签发或暂缓，拒绝陈旧复核 | `POST /api/runs/{id}/review` | `app/review/service.py` | `tests/test_review.py` |
@@ -35,3 +35,5 @@
 ## 深度边界
 
 采信层区分编码、重复表头、列数、空值、全角字符、前导零与冲突重复；整理层负责单位和字段边界；计算层执行核心规则；判定层保留原因码；对账层要求来源行等于采信、隔离、重复和忽略之和；复核层使用版本号阻止陈旧签发。
+
+换表交接在 `app/domain/meters.py` 裁决：单表无交接按旧规则结算；多表房间必须给出完整交接段，段长与计差一致且首尾相接才计入房间用量；段重叠给 `SEGMENT_OVERLAP`，缺口、缺记录或面积冲突给 `HANDOVER_UNCLEAR`，两者都是阻断项，账平也不能签发。房间面积在分摊权重中只出现一次。

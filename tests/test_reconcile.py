@@ -19,16 +19,16 @@ def test_counts_add_up():
 
 
 def test_accepted_count_matches_sample():
-    assert payload()["counts"]["accepted"] == 5
+    assert payload()["counts"]["accepted"] == 7
 
 
 def test_computed_count_matches_rule():
-    assert payload()["counts"]["computed"] == 2
+    assert payload()["counts"]["computed"] == 3
 
 
 def test_metric_total_matches_rows():
     data = payload()
-    assert Decimal(data["ledger"]["metric_total"]) == Decimal("750")
+    assert Decimal(data["ledger"]["metric_total"]) == Decimal("1050")
 
 
 def test_ledger_checks_pass():

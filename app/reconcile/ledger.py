@@ -14,6 +14,8 @@ def build_ledger(intake, prepared, prepare_issues, results):
     checks = [
         {"id": "source", "label": "来源行守恒", "ok": balanced},
         {"id": "computed", "label": "计算条目完整", "ok": counts["computed"] == len(results)},
+        {"id": "handover", "label": "换表交接有效",
+         "ok": all(item.get("problem") not in {"SEGMENT_OVERLAP", "HANDOVER_UNCLEAR"} for item in results)},
     ]
     return {"counts": counts, "balanced": balanced, "metric_field": SPEC.get("metric_field", "metric"),
             "metric_total": str(metric), "checks": checks, "all_checks": all_checks(checks)}

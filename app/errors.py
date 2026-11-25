@@ -18,6 +18,10 @@ MESSAGES = {
     "GATE_BLOCKED": "存在阻断项，不能签发",
     "NOT_APPROVED": "批次尚未签发",
     "BAD_REQUEST": "请求内容不完整",
+    "HANDOVER_INCOMPLETE": "换表交接记录只有一端，起止读数必须同时提供",
+    "HANDOVER_BACKWARDS": "换表交接段终点早于起点",
+    "HANDOVER_UNCLEAR": "换表交接说不清，房间电量不能确认有效段",
+    "SEGMENT_OVERLAP": "新旧表交接段重叠，同一时段电量不能收两遍",
 }
 
 

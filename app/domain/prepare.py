@@ -51,6 +51,10 @@ def prepare_rows(rows):
                 raise ValueError("READING_BACKWARDS")
             if item["main_kwh"] <= 0:
                 raise ValueError("BAD_MAIN")
+            if (item.get("handover_from") is None) != (item.get("handover_to") is None):
+                raise ValueError("HANDOVER_INCOMPLETE")
+            if item.get("handover_from") is not None and item["handover_to"] < item["handover_from"]:
+                raise ValueError("HANDOVER_BACKWARDS")
             item["usage_mwh"] = int((item["end_reading"] - item["start_reading"]) * 1000)
             item["main_mwh"] = int(item["main_kwh"] * 1000)
             items.append(item)

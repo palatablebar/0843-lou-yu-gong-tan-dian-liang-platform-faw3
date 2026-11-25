@@ -47,3 +47,12 @@ def test_comment_is_saved(client):
     run = create(client)
     response = client.post(f"/api/runs/{run['run_id']}/review", json={"decision": "APPROVED", "comment": "复核通过", "expected_revision": 0})
     assert response.get_json()["comment"] == "复核通过"
+
+
+def test_rerun_same_meter_records_does_not_duplicate_billing(client):
+    first = create(client)
+    second = create(client)
+    third = client.post("/api/runs", json={"profile": "clean"}).get_json()
+    assert {run["run_id"] for run in (first, second, third)} == {first["run_id"]}
+    assert third["counts"]["computed"] == first["counts"]["computed"]
+    assert third["summary"] == first["summary"]
